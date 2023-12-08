@@ -22,7 +22,7 @@ const userSchema = new mongoose.Schema({
   createdAt: { type: Date, default: Date.now },
   isActive: { type: Boolean, default: true },
   profilePicture: { type: String },
-  phoneNumber: { type: String },
+  phoneNumber: { type: String, required: true },
   socialMedia: { type: Object },
   clientDetails: {
     deliveryAddress: { type: String },
@@ -32,6 +32,7 @@ const userSchema = new mongoose.Schema({
   },
   vendorDetails: {
     businessName: { type: String },
+    businessAddress: { type: String },
     menu: [{ itemName: String, itemPrice: Number }],
     orders: [{ type: mongoose.Schema.Types.ObjectId, ref: "Order" }],
   },
@@ -139,7 +140,7 @@ const userValidationSchema = Joi.object({
   // Shared fields validation
   isActive: Joi.boolean(),
   profilePicture: Joi.string(),
-  phoneNumber: Joi.string(),
+  phoneNumber: Joi.string().required(),
   socialMedia: Joi.object(),
 });
 

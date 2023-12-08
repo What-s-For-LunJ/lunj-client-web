@@ -30,6 +30,11 @@ const orderSchema = new mongoose.Schema({
     enum: ["pending", "confirmed", "dispatched", "delivered"],
     default: "pending",
   },
+  orderType: {
+    type: String,
+    enum: ["pickup", "delivery"],
+    required: true,
+  },
   createdAt: { type: Date, default: Date.now },
 });
 
@@ -50,6 +55,7 @@ const orderValidationSchema = Joi.object({
     .required(),
   totalAmount: Joi.number().required(),
   status: Joi.string().valid("pending", "confirmed", "dispatched", "delivered"),
+  orderType: Joi.string().valid("pickup", "delivery").required(),
 });
 
 module.exports = {
