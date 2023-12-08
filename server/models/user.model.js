@@ -20,14 +20,10 @@ const userSchema = new mongoose.Schema({
     required: true,
   },
   createdAt: { type: Date, default: Date.now },
-  commonFields: {
-    isActive: { type: Boolean, default: true },
-    profilePicture: { type: String },
-    contactInfo: {
-      phoneNumber: { type: String },
-      socialMedia: { type: Object },
-    },
-  },
+  isActive: { type: Boolean, default: true },
+  profilePicture: { type: String },
+  phoneNumber: { type: String },
+  socialMedia: { type: Object },
   clientDetails: {
     deliveryAddress: { type: String },
     paymentInfo: { type: Object },
@@ -143,10 +139,8 @@ const userValidationSchema = Joi.object({
   // Shared fields validation
   isActive: Joi.boolean(),
   profilePicture: Joi.string(),
-  contactInfo: Joi.object({
-    phoneNumber: Joi.string(),
-    socialMedia: Joi.object(),
-  }),
+  phoneNumber: Joi.string(),
+  socialMedia: Joi.object(),
 });
 
 exports.User = User;
