@@ -48,9 +48,6 @@ router.post("/login", async (req, res) => {
   try {
     // Validate the request body
     const { error } = validateUser(req.body);
-    if (error) {
-      return res.status(400).send(error.details[0].message);
-    }
     if (error) return res.status(400).send(error.details[0].message);
 
     // Check if the email exists
