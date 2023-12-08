@@ -4,8 +4,8 @@ const bp = require("body-parser");
 
 const app = express();
 
-const registerRoute = require("./routes/register.route");
-const loginRoute = require("./routes/login.route");
+const registerRoute = require("./routes/auth/register.route");
+const loginRoute = require("./routes/auth/login.route");
 
 // Configure CORS options
 const corsOptions = {
