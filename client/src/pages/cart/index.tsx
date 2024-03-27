@@ -28,7 +28,7 @@ const index = () => {
                   <dl className="mt-0.5 space-y-px text-gray-600">
                     <div className="text-sm">
                       <dt className="font-bold inline">Price:</dt>
-                      <dd className="inline"> 200</dd>
+                      <dd className="inline"> KES 200</dd>
                     </div>
                     <div className="text-sm">
                       <dt className="font-bold inline">Calories:</dt>
@@ -84,7 +84,7 @@ const index = () => {
                   </div>
                   <div className="flex justify-between !text-base font-medium">
                     <dt>Total</dt>
-                    <dd>KES 2200</dd>
+                    <dd>KES 2750</dd>
                   </div>
                 </dl>
                 <div className="flex justify-end">
