@@ -2,11 +2,27 @@ const express = require("express");
 const bcrypt = require("bcrypt");
 const { User } = require("../../models/user.model");
 const Joi = require("joi");
+const helmet = require("helmet");
+const rateLimit = require("express-rate-limit");
+const asyncMiddleware = require("../../middleware/async.middleware");
 
 const router = express.Router();
 
-router.post("/", async (req, res) => {
-  try {
+// Security enhancements with helmet
+router.use(helmet());
+
+// Rate limiting for login attempts
+const loginLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // Limit each IP to 100 login requests per `window` per 15 minutes
+  message:
+    "Too many login attempts from this IP, please try again after 15 minutes",
+});
+
+router.post(
+  "/",
+  loginLimiter,
+  asyncMiddleware(async (req, res) => {
     // Validate the request body
     const { error } = validateUser(req.body);
     if (error) return res.status(400).send(error.details[0].message);
@@ -31,11 +47,8 @@ router.post("/", async (req, res) => {
       email: user.email,
       role: user.role,
     });
-  } catch (err) {
-    console.error(err.message);
-    res.status(500).send("Internal Server Error");
-  }
-});
+  })
+);
 
 const validateUser = (user) => {
   const schema = Joi.object({

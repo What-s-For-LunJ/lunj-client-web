@@ -1,27 +1,40 @@
 const express = require("express");
 const bcrypt = require("bcrypt");
 const { User, UserValidator } = require("../../models/user.model");
-const Joi = require("joi");
+const helmet = require("helmet");
+const rateLimit = require("express-rate-limit");
+const asyncMiddleware = require("../../middleware/async.middleware");
 
 const router = express.Router();
 
-router.post("/", async (req, res) => {
-  try {
+// Helmet for basic security
+router.use(helmet());
+
+// Rate limiting to prevent brute force on registration
+const createAccountLimiter = rateLimit({
+  windowMs: 60 * 60 * 1000, // 1 hour window
+  max: 5, // start blocking after 5 requests
+  message:
+    "Too many accounts created from this IP, please try again after an hour",
+});
+
+router.post(
+  "/",
+  createAccountLimiter,
+  asyncMiddleware(async (req, res) => {
     // Validate the request body
     const { error } = UserValidator.validate(req.body);
-    if (error) return res.status(400).send(error.details[0].message);
+    if (error) return res.status(400).send("Invalid user data.");
 
-    // Check if the email is already registered
-    let user = await User.findOne({ email: req.body.email });
-    if (user)
-      return res.status(400).send("User with that email already registered.");
-
-    // Check if the username already exists
-    user = await User.findOne({ username: req.body.username });
-    if (user) return res.status(400).send("Username already exists.");
+    // Check for existing user by email or username
+    const existingUser = await User.findOne({
+      $or: [{ email: req.body.email }, { username: req.body.username }],
+    });
+    if (existingUser)
+      return res.status(400).send("Email or username already registered.");
 
     // Create a new user
-    user = new User(req.body);
+    const user = new User(req.body);
 
     // Hash the password
     const salt = await bcrypt.genSalt(10);
@@ -38,10 +51,7 @@ router.post("/", async (req, res) => {
       email: user.email,
       role: user.role,
     });
-  } catch (err) {
-    console.error(err.message);
-    res.status(500).send("Internal Server Error");
-  }
-});
+  })
+);
 
 module.exports = router;

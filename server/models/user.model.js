@@ -1,44 +1,45 @@
-const Joi = require("joi");
 const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
 const config = require("config");
+const Joi = require("joi");
 
-// define schema
+// Main user schema
 const userSchema = new mongoose.Schema({
-  username: { type: String, minlength: 2, maxlength: 255, required: true },
+  username: {
+    type: String,
+    required: true,
+    minlength: 2,
+    maxlength: 255,
+    index: true,
+  },
   email: {
     type: String,
-    unique: true,
+    required: true,
     minlength: 5,
     maxlength: 255,
-    required: true,
+    unique: true,
+    index: true,
   },
-  password: { type: String, minlength: 5, maxlength: 1024, required: true },
+  password: { type: String, required: true, minlength: 5, maxlength: 1024 },
   role: {
     type: String,
-    enum: ["client", "vendor", "rider", "admin"],
     required: true,
+    enum: ["client", "vendor", "rider", "admin"],
   },
   createdAt: { type: Date, default: Date.now },
   isActive: { type: Boolean, default: true },
   profilePicture: { type: String },
   phoneNumber: { type: String, required: true },
-  socialMedia: { type: Object },
-  clientDetails: {
-    deliveryAddress: { type: String },
-    paymentInfo: { type: Object },
-    subscriptionPlan: { type: String },
-    deliverySchedule: [{ dayOfWeek: String, timeOfDay: String }],
-  },
-  vendorDetails: {
-    businessName: { type: String },
-    businessAddress: { type: String },
-    menu: [{ itemName: String, itemPrice: Number }],
-    orders: [{ type: mongoose.Schema.Types.ObjectId, ref: "Order" }],
-  },
-  riderDetails: {
-    vehicleType: { type: String },
-    availability: [{ dayOfWeek: String, timeSlot: String }],
+  socialMediaHandles: { type: Map, of: String },
+  details: {
+    type: mongoose.Schema.Types.Mixed,
+    required: true,
+    validate: {
+      validator: function (v) {
+        return v && Object.keys(v).length > 0;
+      },
+      message: "Details based on role are required.",
+    },
   },
 });
 
@@ -50,98 +51,19 @@ userSchema.methods.generateAuthToken = function () {
   return token;
 };
 
-// create a model & collection
 const User = mongoose.model("User", userSchema);
 
+// Enhancing the Joi validation
 const userValidationSchema = Joi.object({
   username: Joi.string().min(2).max(255).required(),
   email: Joi.string().min(5).max(255).email().required(),
   password: Joi.string().min(5).max(255).alphanum().required(),
   role: Joi.string().valid("client", "vendor", "rider", "admin").required(),
-  // Client-specific fields validation
-  deliveryAddress: Joi.when("role", {
-    is: "client",
-    then: Joi.string().required(),
-    otherwise: Joi.string(),
-  }),
-  paymentInfo: Joi.when("role", {
-    is: "client",
-    then: Joi.object().required(),
-    otherwise: Joi.object(),
-  }),
-  subscriptionPlan: Joi.when("role", {
-    is: "client",
-    then: Joi.string().required(),
-    otherwise: Joi.string(),
-  }),
-  deliverySchedule: Joi.when("role", {
-    is: "client",
-    then: Joi.array()
-      .items(
-        Joi.object({
-          dayOfMonth: Joi.number().integer().min(1).max(31),
-          timeOfDay: Joi.string(),
-        })
-      )
-      .required(),
-    otherwise: Joi.array().items(
-      Joi.object({
-        dayOfWeek: Joi.string(),
-        timeOfDay: Joi.string(),
-      })
-    ),
-  }),
-  // Vendor-specific fields validation
-  businessName: Joi.when("role", {
-    is: "vendor",
-    then: Joi.string().required(),
-    otherwise: Joi.string(),
-  }),
-  menu: Joi.when("role", {
-    is: "vendor",
-    then: Joi.array()
-      .items(
-        Joi.object({
-          itemName: Joi.string(),
-          itemPrice: Joi.number(),
-        })
-      )
-      .required(),
-    otherwise: Joi.array().items(
-      Joi.object({
-        itemName: Joi.string(),
-        itemPrice: Joi.number(),
-      })
-    ),
-  }),
-  // Rider-specific fields validation
-  vehicleType: Joi.when("role", {
-    is: "rider",
-    then: Joi.string().required(),
-    otherwise: Joi.string(),
-  }),
-  availability: Joi.when("role", {
-    is: "rider",
-    then: Joi.array()
-      .items(
-        Joi.object({
-          dayOfWeek: Joi.string(),
-          timeSlot: Joi.string(),
-        })
-      )
-      .required(),
-    otherwise: Joi.array().items(
-      Joi.object({
-        dayOfWeek: Joi.string(),
-        timeSlot: Joi.string(),
-      })
-    ),
-  }),
-  // Shared fields validation
   isActive: Joi.boolean(),
   profilePicture: Joi.string(),
   phoneNumber: Joi.string().required(),
-  socialMedia: Joi.object(),
+  socialMediaHandles: Joi.object().pattern(/^/, Joi.string()),
+  details: Joi.object().required(), // Validate based on role within application logic as needed
 });
 
 exports.User = User;
