@@ -1,30 +1,16 @@
 const express = require("express");
 const bcrypt = require("bcrypt");
-const { User } = require("../../models/user.model");
-const Joi = require("joi");
-const helmet = require("helmet");
-const rateLimit = require("express-rate-limit");
+const User = require("../../models/user.model");
 const asyncMiddleware = require("../../middleware/async.middleware");
+const Joi = require("joi");
 
 const router = express.Router();
 
-// Security enhancements with helmet
-router.use(helmet());
-
-// Rate limiting for login attempts
-const loginLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // Limit each IP to 100 login requests per `window` per 15 minutes
-  message:
-    "Too many login attempts from this IP, please try again after 15 minutes",
-});
-
 router.post(
   "/",
-  loginLimiter,
   asyncMiddleware(async (req, res) => {
     // Validate the request body
-    const { error } = validateUser(req.body);
+    const { error } = validate(req.body);
     if (error) return res.status(400).send(error.details[0].message);
 
     // Check if the email exists
@@ -43,20 +29,20 @@ router.post(
     const token = user.generateAuthToken();
     res.header("x-auth-token", token).send({
       _id: user._id,
-      username: user.username,
       email: user.email,
+      phoneNumber: user.phoneNumber,
       role: user.role,
     });
   })
 );
 
-const validateUser = (user) => {
+const validate = (req) => {
   const schema = Joi.object({
     email: Joi.string().min(5).max(255).email().required(),
-    password: Joi.string().min(5).max(255).alphanum().required(),
+    password: Joi.string().min(5).max(255).required(),
   });
 
-  return schema.validate(user);
+  return schema.validate(req);
 };
 
 module.exports = router;

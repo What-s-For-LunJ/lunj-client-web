@@ -1,37 +1,23 @@
+// routes/auth/register.route.js
 const express = require("express");
 const bcrypt = require("bcrypt");
-const { User, UserValidator } = require("../../models/user.model");
-const helmet = require("helmet");
-const rateLimit = require("express-rate-limit");
+const User = require("../../models/user.model");
 const asyncMiddleware = require("../../middleware/async.middleware");
+const Joi = require("joi");
 
 const router = express.Router();
 
-// Helmet for basic security
-router.use(helmet());
-
-// Rate limiting to prevent brute force on registration
-const createAccountLimiter = rateLimit({
-  windowMs: 60 * 60 * 1000, // 1 hour window
-  max: 5, // start blocking after 5 requests
-  message:
-    "Too many accounts created from this IP, please try again after an hour",
-});
-
 router.post(
   "/",
-  createAccountLimiter,
   asyncMiddleware(async (req, res) => {
     // Validate the request body
-    const { error } = UserValidator.validate(req.body);
-    if (error) return res.status(400).send("Invalid user data.");
+    const { error } = validateUser(req.body);
+    if (error) return res.status(400).send(error.details[0].message);
 
-    // Check for existing user by email or username
-    const existingUser = await User.findOne({
-      $or: [{ email: req.body.email }, { username: req.body.username }],
-    });
+    // Check for existing user by email
+    const existingUser = await User.findOne({ email: req.body.email });
     if (existingUser)
-      return res.status(400).send("Email or username already registered.");
+      return res.status(400).send("Email is already registered.");
 
     // Create a new user
     const user = new User(req.body);
@@ -47,11 +33,22 @@ router.post(
     const token = user.generateAuthToken();
     res.header("x-auth-token", token).send({
       _id: user._id,
-      username: user.username,
       email: user.email,
+      phoneNumber: user.phoneNumber,
       role: user.role,
     });
   })
 );
+
+const validateUser = (user) => {
+  const schema = Joi.object({
+    email: Joi.string().min(5).max(255).email().required(),
+    phoneNumber: Joi.string().min(10).max(15).required(),
+    password: Joi.string().min(5).max(255).required(),
+    role: Joi.string().valid("client", "vendor", "rider", "admin").required(),
+  });
+
+  return schema.validate(user);
+};
 
 module.exports = router;
