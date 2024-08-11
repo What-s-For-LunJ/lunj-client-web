@@ -40,14 +40,18 @@ const Index = () => {
           }
         );
 
-        // Get the token from the response header
-        const token = response.headers["x-auth-token"];
+        // Get the token from the response body
+        const { token } = response.data;
 
-        // Store the token in local storage or cookies
-        localStorage.setItem("authToken", token);
+        if (token) {
+          // Store the token in local storage
+          localStorage.setItem("token", token);
 
-        // Redirect to home page after successful signup
-        router.push("/");
+          // Redirect to home page after successful signup
+          router.push("/");
+        } else {
+          console.error("No token received.");
+        }
       } catch (error) {
         // Check if error is an AxiosError
         if (axios.isAxiosError(error)) {
