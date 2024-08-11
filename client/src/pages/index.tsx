@@ -1,20 +1,25 @@
 import React from "react";
 import Walkthrough from "@/components/app/walkthrough";
-import Preferences from "./preferences";
-// import Address from "./Address";
-// import Payment from "./Payment";
 import { useAtomValue } from "jotai";
-import { setupStepsAtom } from "../utils/atoms";
+import { setupStepsAtom, showWalkthroughAtom } from "../utils/atoms";
 
 const Home: React.FC = () => {
+  // Use the atoms to check setup steps and whether the walkthrough should be shown
   const setupSteps = useAtomValue(setupStepsAtom);
+  const showWalkthrough = useAtomValue(showWalkthroughAtom);
 
   return (
     <div className="home-container">
-      <Walkthrough />
-      {!setupSteps.preferences && <Preferences />}
-      {/* {!setupSteps.address && <Address />} */}
-      {/* {!setupSteps.payment && <Payment />} */}
+      {showWalkthrough ? (
+        <Walkthrough />
+      ) : (
+        <div className="setup-complete-message">
+          {setupSteps.preferences && (
+            <p>Preferences are set. You can update them later in settings.</p>
+          )}
+          {/* Other sections can be added here, like address or payment setup checks */}
+        </div>
+      )}
     </div>
   );
 };

@@ -1,8 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { useAtom } from "jotai";
 import { Check, ChevronsUpDown } from "lucide-react";
-import { setupStepsAtom } from "../../utils/atoms";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
@@ -37,11 +35,15 @@ const cuisineOptions = [
   { value: "American", label: "American" },
 ];
 
-const Preferences: React.FC = () => {
-  const [setupSteps, setSetupSteps] = useAtom(setupStepsAtom);
+interface PreferencesProps {
+  onPreferencesSaved: () => void;
+}
+
+const Preferences: React.FC<PreferencesProps> = ({ onPreferencesSaved }) => {
   const [dietaryPreference, setDietaryPreference] = useState<string[]>([]);
   const [cuisinePreference, setCuisinePreference] = useState<string[]>([]);
   const [token, setToken] = useState<string | null>(null);
+  const [preferencesSaved, setPreferencesSaved] = useState<boolean>(false);
 
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
@@ -71,7 +73,8 @@ const Preferences: React.FC = () => {
       );
 
       if (response.ok) {
-        setSetupSteps((prev) => ({ ...prev, preferences: true }));
+        setPreferencesSaved(true); // Update state to indicate preferences are saved
+        onPreferencesSaved(); // Call the callback function
         console.log("Preferences saved successfully.");
       } else {
         const errorData = await response.json();
@@ -99,26 +102,33 @@ const Preferences: React.FC = () => {
 
   return (
     <div className="p-4">
-      <h2 className="text-xl font-bold mb-4">Set Your Preferences</h2>
-      <div className="mb-6">
-        <PreferenceCombobox
-          label="Dietary Preferences"
-          options={dietaryOptions}
-          selection={dietaryPreference}
-          setSelection={setDietaryPreference}
-          handleSelect={handleSelect}
-        />
-      </div>
-      <div className="mb-6">
-        <PreferenceCombobox
-          label="Cuisine Preferences"
-          options={cuisineOptions}
-          selection={cuisinePreference}
-          setSelection={setCuisinePreference}
-          handleSelect={handleSelect}
-        />
-      </div>
-      <Button onClick={handleSave}>Save Preferences</Button>
+      {preferencesSaved ? (
+        <p className="text-green-600 mb-4">
+          Preferences saved! You can change them later in settings.
+        </p>
+      ) : (
+        <>
+          <div className="mb-6">
+            <PreferenceCombobox
+              label="Dietary Preferences"
+              options={dietaryOptions}
+              selection={dietaryPreference}
+              setSelection={setDietaryPreference}
+              handleSelect={handleSelect}
+            />
+          </div>
+          <div className="mb-6">
+            <PreferenceCombobox
+              label="Cuisine Preferences"
+              options={cuisineOptions}
+              selection={cuisinePreference}
+              setSelection={setCuisinePreference}
+              handleSelect={handleSelect}
+            />
+          </div>
+          <Button onClick={handleSave}>Save Preferences</Button>
+        </>
+      )}
     </div>
   );
 };
