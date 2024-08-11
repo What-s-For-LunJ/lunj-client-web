@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useCallback } from "react";
 import { useAtom } from "jotai";
 import { Button } from "@/components/ui/button";
 import {
@@ -7,12 +7,14 @@ import {
   setupStepsAtom,
 } from "../../../utils/atoms";
 import Preferences from "../../../pages/preferences";
+import AddressForm from "../../../pages/address";
+import { useQuery } from "@apollo/client";
+import { GET_USER_DATA } from "../../../graphql/queries/getUserData";
 
 const steps = [
   "Welcome to LunJ!",
   "Set your preferences",
   "Add your address",
-  "Setup payment",
 ];
 
 const Walkthrough: React.FC = () => {
@@ -20,19 +22,51 @@ const Walkthrough: React.FC = () => {
   const [currentStep, setCurrentStep] = useAtom(walkthroughStepAtom);
   const [setupSteps, setSetupSteps] = useAtom(setupStepsAtom);
 
-  const handleNext = () => {
-    setCurrentStep((prev) => (prev < steps.length - 1 ? prev + 1 : prev));
-  };
+  const { data, loading, error } = useQuery(GET_USER_DATA);
 
-  const handlePrev = () => {
-    setCurrentStep((prev) => (prev > 0 ? prev - 1 : prev));
-  };
+  useEffect(() => {
+    if (data) {
+      const preferencesFilled =
+        data.preferences?.dietaryPreferences?.length > 0 ||
+        data.preferences?.cuisinePreferences?.length > 0;
+      const addressesFilled = data.addresses?.length > 0;
+
+      setSetupSteps((prev) => ({
+        ...prev,
+        preferences: preferencesFilled,
+        address: addressesFilled,
+      }));
+
+      // If all sections are filled, hide walkthrough
+      if (preferencesFilled && addressesFilled) {
+        setShowWalkthrough(false);
+      }
+    }
+  }, [data, setSetupSteps, setShowWalkthrough]);
+
+  const handleNext = useCallback(() => {
+    // Move to the next uncompleted step
+    const nextStep = steps.findIndex((_, index) => {
+      if (index <= currentStep) return false;
+      if (index === 1) return !setupSteps.preferences;
+      if (index === 2) return !setupSteps.address;
+      // Additional logic for other steps
+      return true;
+    });
+
+    if (nextStep !== -1) {
+      setCurrentStep(nextStep);
+    } else {
+      setShowWalkthrough(false);
+    }
+  }, [currentStep, setupSteps, setCurrentStep, setShowWalkthrough]);
 
   const handleSkip = () => {
     setShowWalkthrough(false);
   };
 
-  if (!showWalkthrough) return null;
+  if (!showWalkthrough || loading) return null;
+  if (error) return <p>Error loading walkthrough data.</p>;
 
   return (
     <div className="flex flex-col justify-center items-center min-h-screen">
@@ -42,21 +76,25 @@ const Walkthrough: React.FC = () => {
         </h1>
 
         <div className="mb-6">
-          {currentStep === 1 && (
+          {currentStep === 1 && !setupSteps.preferences && (
             <Preferences
               onPreferencesSaved={() =>
                 setSetupSteps((prev) => ({ ...prev, preferences: true }))
               }
             />
           )}
-          {/* Placeholder for other steps like address and payment setup */}
+          {currentStep === 2 && !setupSteps.address && (
+            <AddressForm
+              onAddressSaved={() =>
+                setSetupSteps((prev) => ({ ...prev, address: true }))
+              }
+            />
+          )}
+          {/* Other components for steps */}
         </div>
 
         <div className="flex justify-center mb-4">
           <div className="space-x-2">
-            <Button onClick={handlePrev} variant="secondary">
-              Prev
-            </Button>
             <Button onClick={handleNext} variant="default">
               Next
             </Button>

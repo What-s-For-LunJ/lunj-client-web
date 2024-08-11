@@ -16,6 +16,9 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { useToast } from "@/components/ui/use-toast";
+import { useQuery } from "@apollo/client";
+import { GET_USER_DATA } from "@/graphql/queries/getUserData";
 
 const dietaryOptions = [
   { value: "Vegetarian", label: "Vegetarian" },
@@ -43,12 +46,24 @@ const Preferences: React.FC<PreferencesProps> = ({ onPreferencesSaved }) => {
   const [dietaryPreference, setDietaryPreference] = useState<string[]>([]);
   const [cuisinePreference, setCuisinePreference] = useState<string[]>([]);
   const [token, setToken] = useState<string | null>(null);
-  const [preferencesSaved, setPreferencesSaved] = useState<boolean>(false);
+  const { toast } = useToast(); // Use the toast hook
+
+  const { data, loading, error } = useQuery(GET_USER_DATA);
 
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
     setToken(storedToken);
-  }, []);
+
+    if (data) {
+      const preferencesFilled =
+        data.preferences?.dietaryPreferences?.length > 0 ||
+        data.preferences?.cuisinePreferences?.length > 0;
+
+      if (preferencesFilled) {
+        onPreferencesSaved();
+      }
+    }
+  }, [data, onPreferencesSaved]);
 
   const handleSave = async () => {
     if (!token) {
@@ -73,9 +88,11 @@ const Preferences: React.FC<PreferencesProps> = ({ onPreferencesSaved }) => {
       );
 
       if (response.ok) {
-        setPreferencesSaved(true); // Update state to indicate preferences are saved
-        onPreferencesSaved(); // Call the callback function
-        console.log("Preferences saved successfully.");
+        onPreferencesSaved();
+        toast({
+          title: "Preferences Saved",
+          description: "Your preferences have been successfully updated.",
+        });
       } else {
         const errorData = await response.json();
         console.error(
@@ -100,35 +117,33 @@ const Preferences: React.FC<PreferencesProps> = ({ onPreferencesSaved }) => {
     );
   };
 
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error loading data</p>;
+
   return (
     <div className="p-4">
-      {preferencesSaved ? (
-        <p className="text-green-600 mb-4">
-          Preferences saved! You can change them later in settings.
-        </p>
-      ) : (
-        <>
-          <div className="mb-6">
-            <PreferenceCombobox
-              label="Dietary Preferences"
-              options={dietaryOptions}
-              selection={dietaryPreference}
-              setSelection={setDietaryPreference}
-              handleSelect={handleSelect}
-            />
-          </div>
-          <div className="mb-6">
-            <PreferenceCombobox
-              label="Cuisine Preferences"
-              options={cuisineOptions}
-              selection={cuisinePreference}
-              setSelection={setCuisinePreference}
-              handleSelect={handleSelect}
-            />
-          </div>
-          <Button onClick={handleSave}>Save Preferences</Button>
-        </>
-      )}
+      <div className="mb-6">
+        <PreferenceCombobox
+          label="Dietary Preferences"
+          options={dietaryOptions}
+          selection={dietaryPreference}
+          setSelection={setDietaryPreference}
+          handleSelect={handleSelect}
+        />
+      </div>
+      <div className="mb-6">
+        <PreferenceCombobox
+          label="Cuisine Preferences"
+          options={cuisineOptions}
+          selection={cuisinePreference}
+          setSelection={setCuisinePreference}
+          handleSelect={handleSelect}
+        />
+      </div>
+      <Button onClick={handleSave}>Save Preferences</Button>
+      <p className="text-sm text-gray-500 mt-4">
+        Preferences can be updated later in settings.
+      </p>
     </div>
   );
 };

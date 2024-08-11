@@ -1,6 +1,9 @@
 const express = require("express");
 const cors = require("cors");
 const bp = require("body-parser");
+const { graphqlHTTP } = require("express-graphql");
+const { schema, root } = require("./graphql/schema");
+const authMiddleware = require("./middleware/auth.middleware");
 
 const app = express();
 
@@ -29,6 +32,18 @@ app.use("/api/register", registerRoute);
 app.use("/api/login", loginRoute);
 app.use("/api/user/addresses", addressRoute);
 app.use("/api/user/preferences", preferenceRoute);
+
+// GraphQL endpoint
+app.use(
+  "/graphql",
+  authMiddleware,
+  graphqlHTTP((req) => ({
+    schema,
+    rootValue: root,
+    graphiql: true,
+    context: { user: req.user },
+  }))
+);
 
 app.listen(8080, () => {
   console.log("App is running on port 8080");
