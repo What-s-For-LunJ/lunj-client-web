@@ -14,7 +14,7 @@ const Index = () => {
       email: "",
       tel: "",
       password: "",
-      role: "client", // Default role, can be changed based on your needs
+      role: "client",
     },
     validationSchema: Yup.object({
       email: Yup.string()
@@ -29,7 +29,7 @@ const Index = () => {
     }),
     onSubmit: async (values) => {
       try {
-        // Make a POST request to the register API
+        // POST request to the register API
         const response = await axios.post(
           "http://localhost:8080/api/register",
           {
