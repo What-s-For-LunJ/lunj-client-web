@@ -6,6 +6,8 @@ const app = express();
 
 const registerRoute = require("./routes/auth/register.route");
 const loginRoute = require("./routes/auth/login.route");
+const addressRoute = require("./routes/user/address.route");
+const preferenceRoute = require("./routes/user/preference.route");
 
 // CORS options
 const corsOptions = {
@@ -25,6 +27,8 @@ app.use(bp.urlencoded({ extended: true }));
 // Use the routes
 app.use("/api/register", registerRoute);
 app.use("/api/login", loginRoute);
+app.use("/api/user/addresses", addressRoute);
+app.use("/api/user/preferences", preferenceRoute);
 
 app.listen(8080, () => {
   console.log("App is running on port 8080");

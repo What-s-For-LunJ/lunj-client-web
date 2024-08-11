@@ -11,11 +11,12 @@ router.post(
   asyncMiddleware(async (req, res) => {
     // Validate the request body
     const { error } = validate(req.body);
-    if (error) return res.status(400).send(error.details[0].message);
+    if (error) return res.status(400).json({ error: error.details[0].message });
 
     // Check if the email exists
     const user = await User.findOne({ email: req.body.email });
-    if (!user) return res.status(400).send("Invalid email or password.");
+    if (!user)
+      return res.status(400).json({ error: "Invalid email or password." });
 
     // Check if the password is correct
     const validPassword = await bcrypt.compare(
@@ -23,15 +24,14 @@ router.post(
       user.password
     );
     if (!validPassword)
-      return res.status(400).send("Invalid email or password.");
+      return res.status(400).json({ error: "Invalid email or password." });
 
-    // Generate and send the authentication token
+    // Generate the authentication token
     const token = user.generateAuthToken();
-    res.header("x-auth-token", token).send({
-      _id: user._id,
-      email: user.email,
-      phoneNumber: user.phoneNumber,
-      role: user.role,
+
+    // Send the authentication token in the response body
+    res.json({
+      token,
     });
   })
 );
