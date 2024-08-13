@@ -13,9 +13,13 @@ import { useToast } from "@/components/ui/use-toast";
 
 interface AddressFormProps {
   onAddressSaved: () => void;
+  handleNext: () => void;
 }
 
-const AddressForm: React.FC<AddressFormProps> = ({ onAddressSaved }) => {
+const AddressForm: React.FC<AddressFormProps> = ({
+  onAddressSaved,
+  handleNext,
+}) => {
   const [label, setLabel] = useState<string>("primary");
   const [addressLine1, setAddressLine1] = useState<string>("");
   const [addressLine2, setAddressLine2] = useState<string>("");
@@ -50,6 +54,7 @@ const AddressForm: React.FC<AddressFormProps> = ({ onAddressSaved }) => {
           title: "Address Saved",
           description: "Your address has been successfully updated.",
         });
+        handleNext(); // Move to the next step
       } else {
         const errorData = await response.json();
         console.error(
@@ -126,7 +131,7 @@ const AddressForm: React.FC<AddressFormProps> = ({ onAddressSaved }) => {
         />
       </div>
       <Button onClick={handleSaveAddress}>Save Address</Button>
-      <p className="text-sm text-gray-500 mt-4">
+      <p className="text-sm font-bold text-green-500 mt-4">
         Addresses can be updated later in settings.
       </p>
     </div>

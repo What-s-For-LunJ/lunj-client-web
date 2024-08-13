@@ -40,9 +40,13 @@ const cuisineOptions = [
 
 interface PreferencesProps {
   onPreferencesSaved: () => void;
+  handleNext: () => void;
 }
 
-const Preferences: React.FC<PreferencesProps> = ({ onPreferencesSaved }) => {
+const Preferences: React.FC<PreferencesProps> = ({
+  onPreferencesSaved,
+  handleNext,
+}) => {
   const [dietaryPreference, setDietaryPreference] = useState<string[]>([]);
   const [cuisinePreference, setCuisinePreference] = useState<string[]>([]);
   const [token, setToken] = useState<string | null>(null);
@@ -93,6 +97,7 @@ const Preferences: React.FC<PreferencesProps> = ({ onPreferencesSaved }) => {
           title: "Preferences Saved",
           description: "Your preferences have been successfully updated.",
         });
+        handleNext();
       } else {
         const errorData = await response.json();
         console.error(
@@ -141,7 +146,7 @@ const Preferences: React.FC<PreferencesProps> = ({ onPreferencesSaved }) => {
         />
       </div>
       <Button onClick={handleSave}>Save Preferences</Button>
-      <p className="text-sm text-gray-500 mt-4">
+      <p className="text-sm font-bold text-green-500 mt-4">
         Preferences can be updated later in settings.
       </p>
     </div>
