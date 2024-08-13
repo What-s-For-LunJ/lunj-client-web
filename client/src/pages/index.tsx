@@ -1,8 +1,8 @@
 /* eslint-disable react/no-unescaped-entities */
 import React, { useCallback, useMemo } from "react";
 import Walkthrough from "@/components/app/walkthrough";
-import Preferences from "./preferences";
-import AddressForm from "./address";
+import Preferences from "@/components/app/preferences";
+import AddressForm from "@/components/app/address";
 import { useAtom } from "jotai";
 import {
   setupStepsAtom,

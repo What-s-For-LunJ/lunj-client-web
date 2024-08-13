@@ -19,7 +19,6 @@ import {
 import { useToast } from "@/components/ui/use-toast";
 import { useQuery } from "@apollo/client";
 import { GET_USER_DATA } from "@/graphql/queries/getUserData";
-import { ToastAction } from "@radix-ui/react-toast";
 
 const dietaryOptions = [
   { value: "Vegetarian", label: "Vegetarian" },
