@@ -14,7 +14,7 @@ const Index = () => {
       email: "",
       tel: "",
       password: "",
-      role: "client", // Default role, can be changed based on your needs
+      role: "client",
     },
     validationSchema: Yup.object({
       email: Yup.string()
@@ -29,7 +29,7 @@ const Index = () => {
     }),
     onSubmit: async (values) => {
       try {
-        // Make a POST request to the register API
+        // POST request to the register API
         const response = await axios.post(
           "http://localhost:8080/api/register",
           {
@@ -40,14 +40,18 @@ const Index = () => {
           }
         );
 
-        // Get the token from the response header
-        const token = response.headers["x-auth-token"];
+        // Get the token from the response body
+        const { token } = response.data;
 
-        // Store the token in local storage or cookies
-        localStorage.setItem("authToken", token);
+        if (token) {
+          // Store the token in local storage
+          localStorage.setItem("token", token);
 
-        // Redirect to home page after successful signup
-        router.push("/");
+          // Redirect to home page after successful signup
+          router.push("/");
+        } else {
+          console.error("No token received.");
+        }
       } catch (error) {
         // Check if error is an AxiosError
         if (axios.isAxiosError(error)) {

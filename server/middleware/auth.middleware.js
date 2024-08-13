@@ -2,17 +2,15 @@ const jwt = require("jsonwebtoken");
 const config = require("config");
 
 function authMiddleware(req, res, next) {
-  // Get the token from the request header
-  const token = req.header("x-auth-token");
+  const authHeader = req.header("Authorization");
+  if (!authHeader)
+    return res.status(401).send("Access denied. No token provided.");
 
-  // Check if the token is present
+  const token = authHeader.split(" ")[1];
   if (!token) return res.status(401).send("Access denied. No token provided.");
 
   try {
-    // Verify the token
     const decoded = jwt.verify(token, config.get("jwtPrivateKey"));
-
-    // Attach the user object to the request
     req.user = decoded;
     next();
   } catch (ex) {

@@ -1,4 +1,3 @@
-// routes/auth/register.route.js
 const express = require("express");
 const bcrypt = require("bcrypt");
 const User = require("../../models/user.model");
@@ -31,7 +30,8 @@ router.post(
 
     // Generate and send the authentication token
     const token = user.generateAuthToken();
-    res.header("x-auth-token", token).send({
+    res.json({
+      token,
       _id: user._id,
       email: user.email,
       phoneNumber: user.phoneNumber,
