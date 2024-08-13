@@ -8,11 +8,19 @@ const preferenceSchema = new mongoose.Schema({
   },
   dietaryPreferences: {
     type: [String],
-    enum: ["Vegetarian", "Vegan", "Gluten-Free", "Halal", "Kosher", "None"],
+    enum: ["Vegetarian", "Vegan", "Gluten-Free", "Halal", "Kosher", "Any"],
   },
   cuisinePreferences: {
     type: [String],
-    enum: ["Italian", "Chinese", "Indian", "Mexican", "Thai", "American"],
+    enum: [
+      "Italian",
+      "Chinese",
+      "Indian",
+      "Mexican",
+      "Thai",
+      "American",
+      "Any",
+    ],
   },
 });
 

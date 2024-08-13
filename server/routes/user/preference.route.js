@@ -95,7 +95,7 @@ const validatePreference = (preference) => {
           "Gluten-Free",
           "Halal",
           "Kosher",
-          "None"
+          "Any"
         )
       )
       .unique(),
@@ -107,7 +107,8 @@ const validatePreference = (preference) => {
           "Indian",
           "Mexican",
           "Thai",
-          "American"
+          "American",
+          "Any"
         )
       )
       .unique(),

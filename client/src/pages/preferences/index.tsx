@@ -19,6 +19,7 @@ import {
 import { useToast } from "@/components/ui/use-toast";
 import { useQuery } from "@apollo/client";
 import { GET_USER_DATA } from "@/graphql/queries/getUserData";
+import { ToastAction } from "@radix-ui/react-toast";
 
 const dietaryOptions = [
   { value: "Vegetarian", label: "Vegetarian" },
@@ -101,6 +102,11 @@ const Preferences: React.FC<PreferencesProps> = ({
         handleNext();
       } else {
         const errorData = await response.json();
+        toast({
+          variant: "destructive",
+          title: "Uh oh! Something went wrong.",
+          description: "Failed to save preferences.",
+        });
         console.error(
           "Failed to save preferences:",
           errorData.error || response.statusText
@@ -146,7 +152,9 @@ const Preferences: React.FC<PreferencesProps> = ({
           handleSelect={handleSelect}
         />
       </div>
-      <Button onClick={handleSave}>Save Preferences</Button>
+      <Button onClick={handleSave} className="w-full">
+        Save Preferences
+      </Button>
       <p className="text-sm font-bold text-green-500 mt-4">
         Preferences can be updated later in settings.
       </p>

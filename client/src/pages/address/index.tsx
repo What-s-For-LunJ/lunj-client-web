@@ -10,6 +10,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useToast } from "@/components/ui/use-toast";
+import { Input } from "@/components/ui/input";
 
 interface AddressFormProps {
   onAddressSaved: () => void;
@@ -57,6 +58,11 @@ const AddressForm: React.FC<AddressFormProps> = ({
         handleNext(); // Move to the next step
       } else {
         const errorData = await response.json();
+        toast({
+          variant: "destructive",
+          title: "Uh oh! Something went wrong.",
+          description: "Failed to save address(es). Make sure you filled it in correctly",
+        });
         console.error(
           "Failed to save address:",
           errorData.error || response.statusText
@@ -69,7 +75,6 @@ const AddressForm: React.FC<AddressFormProps> = ({
 
   return (
     <div className="p-4">
-      <h2 className="text-xl font-bold mb-4">Add Your Address</h2>
       <div className="mb-6">
         <Select onValueChange={setLabel} value={label}>
           <SelectTrigger className="w-full">
@@ -86,51 +91,48 @@ const AddressForm: React.FC<AddressFormProps> = ({
         </Select>
       </div>
       <div className="mb-6">
-        <input
+        <Input
           type="text"
           placeholder="Address Line 1"
           value={addressLine1}
           onChange={(e) => setAddressLine1(e.target.value)}
-          className="w-full p-2 border border-gray-300 rounded"
         />
       </div>
       <div className="mb-6">
-        <input
+        <Input
           type="text"
           placeholder="Address Line 2"
           value={addressLine2}
           onChange={(e) => setAddressLine2(e.target.value)}
-          className="w-full p-2 border border-gray-300 rounded"
         />
       </div>
       <div className="mb-6">
-        <input
+        <Input
           type="text"
           placeholder="City"
           value={city}
           onChange={(e) => setCity(e.target.value)}
-          className="w-full p-2 border border-gray-300 rounded"
         />
       </div>
       <div className="mb-6">
-        <input
+        <Input
           type="text"
           placeholder="Postal Code"
           value={postalCode}
           onChange={(e) => setPostalCode(e.target.value)}
-          className="w-full p-2 border border-gray-300 rounded"
         />
       </div>
       <div className="mb-6">
-        <input
+        <Input
           type="text"
           placeholder="Country"
           value={country}
           onChange={(e) => setCountry(e.target.value)}
-          className="w-full p-2 border border-gray-300 rounded"
         />
       </div>
-      <Button onClick={handleSaveAddress}>Save Address</Button>
+      <Button onClick={handleSaveAddress} className="w-full">
+        Save Address
+      </Button>
       <p className="text-sm font-bold text-green-500 mt-4">
         Addresses can be updated later in settings.
       </p>
