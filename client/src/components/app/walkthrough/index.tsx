@@ -11,11 +11,7 @@ import AddressForm from "../../../pages/address";
 import { useQuery } from "@apollo/client";
 import { GET_USER_DATA } from "../../../graphql/queries/getUserData";
 
-const steps = [
-  "Welcome to LunJ!",
-  "Set your preferences",
-  "Add your address",
-];
+const steps = ["Welcome to LunJ!", "Set your preferences", "Add your address"];
 
 const Walkthrough: React.FC = () => {
   const [showWalkthrough, setShowWalkthrough] = useAtom(showWalkthroughAtom);
@@ -50,7 +46,6 @@ const Walkthrough: React.FC = () => {
       if (index <= currentStep) return false;
       if (index === 1) return !setupSteps.preferences;
       if (index === 2) return !setupSteps.address;
-      // Additional logic for other steps
       return true;
     });
 
@@ -78,16 +73,18 @@ const Walkthrough: React.FC = () => {
         <div className="mb-6">
           {currentStep === 1 && !setupSteps.preferences && (
             <Preferences
-              onPreferencesSaved={() =>
-                setSetupSteps((prev) => ({ ...prev, preferences: true }))
-              }
+              onPreferencesSaved={() => {
+                setSetupSteps((prev) => ({ ...prev, preferences: true }));
+                handleNext();
+              }}
             />
           )}
           {currentStep === 2 && !setupSteps.address && (
             <AddressForm
-              onAddressSaved={() =>
-                setSetupSteps((prev) => ({ ...prev, address: true }))
-              }
+              onAddressSaved={() => {
+                setSetupSteps((prev) => ({ ...prev, address: true }));
+                handleNext();
+              }}
             />
           )}
           {/* Other components for steps */}
