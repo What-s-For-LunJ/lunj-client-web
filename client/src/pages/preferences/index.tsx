@@ -26,7 +26,7 @@ const dietaryOptions = [
   { value: "Gluten-Free", label: "Gluten-Free" },
   { value: "Halal", label: "Halal" },
   { value: "Kosher", label: "Kosher" },
-  { value: "None", label: "None" },
+  { value: "Any", label: "Any" },
 ];
 
 const cuisineOptions = [
@@ -36,6 +36,7 @@ const cuisineOptions = [
   { value: "Mexican", label: "Mexican" },
   { value: "Thai", label: "Thai" },
   { value: "American", label: "American" },
+  { value: "Any", label: "Any" },
 ];
 
 interface PreferencesProps {
