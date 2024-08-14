@@ -5,6 +5,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useRouter } from "next/router";
 import axios from "axios";
+import Link from "next/link";
 
 const Index = () => {
   const router = useRouter();
@@ -134,6 +135,12 @@ const Index = () => {
           >
             Register
           </Button>
+          <div className="mt-4 text-center text-sm">
+            Already have an account?{" "}
+            <Link href="/login" className="underline">
+              Sign in
+            </Link>
+          </div>
         </form>
         <div className="flex justify-between items-center mt-6">
           <span className="border-b w-1/5 lg:w-1/4"></span>
