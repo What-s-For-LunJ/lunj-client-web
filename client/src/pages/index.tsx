@@ -32,8 +32,8 @@ const Home: React.FC = () => {
     // Clear the token from localStorage
     localStorage.removeItem("token");
 
-    // Redirect to the register or login page
-    router.push("/register");
+    // Redirect to the login page
+    router.push("/login");
   };
 
   // Define handleNext function here
