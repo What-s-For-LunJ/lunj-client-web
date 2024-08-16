@@ -1,5 +1,6 @@
 const express = require("express");
 const bcrypt = require("bcrypt");
+const { body, validationResult } = require("express-validator");
 const User = require("../../models/user.model");
 const asyncMiddleware = require("../../middleware/async.middleware");
 const Joi = require("joi");
@@ -9,8 +10,20 @@ const router = express.Router();
 
 router.post(
   "/",
+  [
+    body("email").isEmail().normalizeEmail(),
+    body("phoneNumber").trim().escape(),
+    body("password").trim().escape(),
+  ],
   registerLimiter,
   asyncMiddleware(async (req, res) => {
+    // Check for validation errors after input sanitization and validation.
+    // If any errors are found, return a 400 Bad Request response with the error details.
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
     // Validate the request body
     const { error } = validateUser(req.body);
     if (error) return res.status(400).send(error.details[0].message);

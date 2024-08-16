@@ -13,6 +13,13 @@ router.post(
   [body("email").isEmail().normalizeEmail(), body("password").trim().escape()],
   loginLimiter,
   asyncMiddleware(async (req, res) => {
+    // Check for validation errors after input sanitization and validation.
+    // If any errors are found, return a 400 Bad Request response with the error details.
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
     // Validate the request body
     const { error } = validate(req.body);
     if (error) return res.status(400).json({ error: error.details[0].message });
