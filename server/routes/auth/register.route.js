@@ -46,7 +46,17 @@ const validateUser = (user) => {
   const schema = Joi.object({
     email: Joi.string().min(5).max(255).email().required(),
     phoneNumber: Joi.string().min(10).max(15).required(),
-    password: Joi.string().min(5).max(255).required(),
+    password: Joi.string()
+      .min(8)
+      .max(255)
+      .regex(
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
+      )
+      .required()
+      .messages({
+        "string.pattern.base":
+          "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character.",
+      }),
     role: Joi.string().valid("client", "vendor", "rider", "admin").required(),
   });
 
