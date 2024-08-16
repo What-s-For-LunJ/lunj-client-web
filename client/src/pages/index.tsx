@@ -1,4 +1,3 @@
-/* eslint-disable react/no-unescaped-entities */
 import React, { useCallback, useEffect, useMemo } from "react";
 import Walkthrough from "@/components/app/walkthrough";
 import Preferences from "@/components/app/walkthrough/preferences";
@@ -44,7 +43,7 @@ const Home: React.FC = () => {
         title: "What's for Lunj?",
         component: (
           <p className="text-center">
-            Let's first get a few things out the way.
+            Let&apos;s first get a few things out the way.
           </p>
         ),
         condition: () => true, // This is always true as it's the starting step
@@ -103,7 +102,7 @@ const Home: React.FC = () => {
         title: "What's for Lunj?",
         component: (
           <p className="text-center">
-            Let's first get a few things out the way.
+            Let&apos;s first get a few things out the way.
           </p>
         ),
         condition: () => true,
