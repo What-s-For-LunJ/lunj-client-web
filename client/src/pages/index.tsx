@@ -1,5 +1,5 @@
 /* eslint-disable react/no-unescaped-entities */
-import React, { useCallback, useMemo } from "react";
+import React, { useCallback, useEffect, useMemo } from "react";
 import Walkthrough from "@/components/app/walkthrough";
 import Preferences from "@/components/app/walkthrough/preferences";
 import AddressForm from "@/components/app/walkthrough/address";
@@ -11,11 +11,30 @@ import {
 } from "../utils/atoms";
 import { ApolloProvider } from "@apollo/client";
 import client from "../graphql/apollo-client";
+import { useRouter } from "next/router";
 
 const Home: React.FC = () => {
+  const router = useRouter();
+
   const [setupSteps, setSetupSteps] = useAtom(setupStepsAtom);
   const [showWalkthrough, setShowWalkthrough] = useAtom(showWalkthroughAtom);
   const [currentStep, setCurrentStep] = useAtom(walkthroughStepAtom);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      // Redirect to the register page if not authenticated
+      router.push("/register");
+    }
+  }, [router]);
+
+  const handleSignOut = () => {
+    // Clear the token from localStorage
+    localStorage.removeItem("token");
+
+    // Redirect to the register or login page
+    router.push("/register");
+  };
 
   // Define handleNext function here
   const handleNext = useCallback(() => {
@@ -126,7 +145,15 @@ const Home: React.FC = () => {
         ) : (
           <div className="setup-complete-message">
             {setupSteps.preferences && setupSteps.address ? (
-              <h1 className="text-3xl font-bold">Home</h1>
+              <>
+                <h1 className="text-3xl font-bold">Home</h1>
+                <button
+                  onClick={handleSignOut}
+                  className="signout-button bg-red-500 text-white px-4 py-2 rounded"
+                >
+                  Sign Out
+                </button>
+              </>
             ) : (
               <>
                 {setupSteps.preferences && (
@@ -149,4 +176,3 @@ const Home: React.FC = () => {
 };
 
 export default Home;
-
