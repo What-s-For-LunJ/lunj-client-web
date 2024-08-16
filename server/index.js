@@ -4,6 +4,7 @@ const bp = require("body-parser");
 const { graphqlHTTP } = require("express-graphql");
 const { schema, root } = require("./graphql/schema");
 const authMiddleware = require("./middleware/auth.middleware");
+const expressStatusMonitor = require("express-status-monitor");
 
 const app = express();
 
@@ -29,6 +30,7 @@ dbConnect();
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use(bp.urlencoded({ extended: true }));
+app.use(expressStatusMonitor());
 
 // Use the routes
 app.use("/api/register", registerRoute);
