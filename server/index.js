@@ -7,8 +7,11 @@ const authMiddleware = require("./middleware/auth.middleware");
 
 const app = express();
 
+// Auth
 const registerRoute = require("./routes/auth/register.route");
 const loginRoute = require("./routes/auth/login.route");
+const signoutRoute = require("./routes/auth/signout.route");
+
 const addressRoute = require("./routes/user/address.route");
 const preferenceRoute = require("./routes/user/preference.route");
 
@@ -30,6 +33,7 @@ app.use(bp.urlencoded({ extended: true }));
 // Use the routes
 app.use("/api/register", registerRoute);
 app.use("/api/login", loginRoute);
+app.use("/api/signout", signoutRoute);
 app.use("/api/user/addresses", addressRoute);
 app.use("/api/user/preferences", preferenceRoute);
 
