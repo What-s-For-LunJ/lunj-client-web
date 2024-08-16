@@ -3,11 +3,13 @@ const bcrypt = require("bcrypt");
 const User = require("../../models/user.model");
 const asyncMiddleware = require("../../middleware/async.middleware");
 const Joi = require("joi");
+const { registerLimiter } = require("../../middleware/rateLimiter.middleware");
 
 const router = express.Router();
 
 router.post(
   "/",
+  registerLimiter,
   asyncMiddleware(async (req, res) => {
     // Validate the request body
     const { error } = validateUser(req.body);
