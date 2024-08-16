@@ -1,5 +1,6 @@
 const express = require("express");
 const bcrypt = require("bcrypt");
+const { body, validationResult } = require("express-validator");
 const User = require("../../models/user.model");
 const asyncMiddleware = require("../../middleware/async.middleware");
 const Joi = require("joi");
@@ -9,6 +10,7 @@ const router = express.Router();
 
 router.post(
   "/",
+  [body("email").isEmail().normalizeEmail(), body("password").trim().escape()],
   loginLimiter,
   asyncMiddleware(async (req, res) => {
     // Validate the request body
