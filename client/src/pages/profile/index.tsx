@@ -1,3 +1,4 @@
+"use client" 
 import { Metadata } from "next"
 import Image from "next/image"
 
@@ -15,13 +16,14 @@ import {
   TabsList,
   TabsTrigger,
 } from "@/components/ui/tabs"
-// import { CalendarDateRangePicker } from "@/components/ui/date-range-picker"
-// import { MainNav } from "@/components/ui/main-nav"
-// import { Overview } from "@/components/ui/overview"
-// import { RecentSales } from "@/components/ui/recent-sales"
-// import { Search } from "@/components/ui/search"
-// import TeamSwitcher from "@/components/ui/team-switcher"
-// import { UserNav } from "@/components/ui/user-nav"
+import { CalendarDateRangePicker } from "@/components/ui/date-range-picker"
+import { MainNav } from "@/components/ui/main-nav"
+import { Overview } from "@/components/ui/overview"
+import { RecentSales } from "@/components/ui/recent-sales"
+import { Search } from "@/components/ui/search"
+import TeamSwitcher from "@/components/ui/team-switcher"
+import { UserNav } from "@/components/ui/user-nav"
+import { CartNav } from "@/components/ui/cart"
 
 export const metadata: Metadata = {
   title: "Dashboard",
@@ -50,11 +52,12 @@ export default function DashboardPage() {
       <div className="hidden flex-col md:flex">
         <div className="border-b">
           <div className="flex h-16 items-center px-4">
-            {/* <TeamSwitcher /> */}
-            {/* <MainNav className="mx-6" /> */}
+            <TeamSwitcher />
+            <MainNav className="mx-6" />
             <div className="ml-auto flex items-center space-x-4">
-              {/* <Search /> */}
-              {/* <UserNav /> */}
+              <Search />
+              <UserNav />
+              <CartNav />
             </div>
           </div>
         </div>
@@ -62,7 +65,7 @@ export default function DashboardPage() {
           <div className="flex items-center justify-between space-y-2">
             <h2 className="text-3xl font-bold tracking-tight">Dashboard</h2>
             <div className="flex items-center space-x-2">
-              {/* <CalendarDateRangePicker /> */}
+              <CalendarDateRangePicker />
               <Button>Download</Button>
             </div>
           </div>
@@ -189,7 +192,7 @@ export default function DashboardPage() {
                     <CardTitle>Overview</CardTitle>
                   </CardHeader>
                   <CardContent className="pl-2">
-                    {/* <Overview /> */}
+                    <Overview />
                   </CardContent>
                 </Card>
                 <Card className="col-span-3">
@@ -200,7 +203,7 @@ export default function DashboardPage() {
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
-                    {/* <RecentSales /> */}
+                    <RecentSales />
                   </CardContent>
                 </Card>
               </div>

@@ -1,7 +1,6 @@
 import {
     Avatar,
     AvatarFallback,
-    AvatarImage,
   } from "@/components/ui/avatar"
   import { Button } from "@/components/ui/button"
   import {
@@ -14,49 +13,47 @@ import {
     DropdownMenuShortcut,
     DropdownMenuTrigger,
   } from "@/components/ui/dropdown-menu"
+  import { FaShoppingCart } from 'react-icons/fa';
   
-  export function UserNav() {
+  export function CartNav() {
     return (
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="ghost" className="relative h-8 w-8 rounded-full">
-            <Avatar className="h-8 w-8">
-              <AvatarImage src="/avatars/01.png" alt="@shadcn" />
-              <AvatarFallback>SC</AvatarFallback>
+          <Button variant="ghost" className="relative h-8 w-8 p-0">
+            <Avatar className="relative h-8 w-8">
+              {/* Center the shopping cart icon within the Avatar */}
+              <FaShoppingCart className="absolute inset-0 m-auto h-6 w-6 text-gray-800" />
+              <AvatarFallback className="hidden">SC</AvatarFallback>
             </Avatar>
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="w-56" align="end" forceMount>
           <DropdownMenuLabel className="font-normal">
             <div className="flex flex-col space-y-1">
-              <p className="text-sm font-medium leading-none">shadcn</p>
+              <p className="text-sm font-medium leading-none">Shopping Cart</p>
               <p className="text-xs leading-none text-muted-foreground">
-                m@example.com
+                Items in your cart
               </p>
             </div>
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuGroup>
             <DropdownMenuItem>
-              Profile
-              <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
+              View Cart
+              <DropdownMenuShortcut>⌘C</DropdownMenuShortcut>
             </DropdownMenuItem>
             <DropdownMenuItem>
-              Billing
-              <DropdownMenuShortcut>⌘B</DropdownMenuShortcut>
+              Checkout
+              <DropdownMenuShortcut>⌘K</DropdownMenuShortcut>
             </DropdownMenuItem>
             <DropdownMenuItem>
-              Settings
-              <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
+              Wishlist
+              <DropdownMenuShortcut>⌘W</DropdownMenuShortcut>
             </DropdownMenuItem>
-            <DropdownMenuItem>New Team</DropdownMenuItem>
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
-          <DropdownMenuItem>
-            Log out
-            <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
-          </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
     )
   }
+  
