@@ -21,7 +21,7 @@ export default function TeamSwitcher({ className }: TeamSwitcherProps) {
           "font-custom" // Replace this with the actual font class or inline styles
         )}
       >
-        What's For Lunj?
+       Lunj?
       </span>
     </div>
   )
