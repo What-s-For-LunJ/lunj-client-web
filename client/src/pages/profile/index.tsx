@@ -1,34 +1,32 @@
-"use client" 
-import { Metadata } from "next"
-import Image from "next/image"
+"use client";
+import { Metadata } from "next";
+import Image from "next/image";
+import { motion } from "framer-motion";
 
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@/components/ui/tabs"
-import { CalendarDateRangePicker } from "@/components/ui/date-range-picker"
-import { MainNav } from "@/components/ui/main-nav"
-import { Overview } from "@/components/ui/overview"
-import { RecentSales } from "@/components/ui/recent-sales"
-import { Search } from "@/components/ui/search"
-import TeamSwitcher from "@/components/ui/team-switcher"
-import { UserNav } from "@/components/ui/user-nav"
-import { CartNav } from "@/components/ui/cart"
+  CardDetail,
+  CardOffer,
+} from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { CalendarDateRangePicker } from "@/components/ui/date-range-picker";
+import { MainNav } from "@/components/ui/main-nav";
+import { Overview } from "@/components/ui/overview";
+import { RecentSales } from "@/components/ui/recent-sales";
+import { Search } from "@/components/ui/search";
+import TeamSwitcher from "@/components/ui/team-switcher";
+import { UserNav } from "@/components/ui/user-nav";
+import { CartNav } from "@/components/ui/cart";
 
 export const metadata: Metadata = {
   title: "Dashboard",
   description: "Example dashboard app built using the components.",
-}
+};
 
 export default function DashboardPage() {
   return (
@@ -63,147 +61,321 @@ export default function DashboardPage() {
         </div>
         <div className="flex-1 space-y-4 p-8 pt-6">
           <div className="flex items-center justify-between space-y-2">
-            <h2 className="text-3xl font-bold tracking-tight">Dashboard</h2>
+            <h2 className="text-3xl font-bold tracking-tight">
+              What's For Lunj?
+            </h2>
             <div className="flex items-center space-x-2">
               <CalendarDateRangePicker />
               <Button>Download</Button>
             </div>
           </div>
-          <Tabs defaultValue="overview" className="space-y-4">
+          <Tabs defaultValue="meals" className="space-y-4">
             <TabsList>
-              <TabsTrigger value="overview">Overview</TabsTrigger>
-              <TabsTrigger value="analytics" disabled>
-                Analytics
-              </TabsTrigger>
-              <TabsTrigger value="reports" disabled>
-                Reports
-              </TabsTrigger>
-              <TabsTrigger value="notifications" disabled>
-                Notifications
-              </TabsTrigger>
+              <TabsTrigger value="meals">Meals</TabsTrigger>
+              <TabsTrigger value="restaurants">Restaurants</TabsTrigger>
+              <TabsTrigger value="offers">Offers</TabsTrigger>
+              <TabsTrigger value="combos">Combos</TabsTrigger>
             </TabsList>
-            <TabsContent value="overview" className="space-y-4">
+            <TabsContent value="meals" className="space-y-4">
               <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-                <Card>
+                <Card
+                  backgroundImage="https://dynamic-media-cdn.tripadvisor.com/media/photo-o/1b/99/44/8e/kfc-faxafeni.jpg?w=800&h=-1&s=1"
+                  className="custom-class"
+                >
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium">
-                      Total Revenue
-                    </CardTitle>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      className="h-4 w-4 text-muted-foreground"
-                    >
-                      <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
-                    </svg>
+                    <CardTitle className="text-sm font-medium"></CardTitle>
+                    <CardOffer>
+                      <p className="font-bold">-55%</p>
+                    </CardOffer>
                   </CardHeader>
-                  <CardContent>
-                    <div className="text-2xl font-bold">$45,231.89</div>
-                    <p className="text-xs text-muted-foreground">
-                      +20.1% from last month
-                    </p>
+                  <CardContent className="p-2">
+                    {" "}
+                    {/* Adjusted padding */}
+                    <CardDetail>
+                      <p className="text-xs font-bold text-white">KFC</p>
+                    </CardDetail>
                   </CardContent>
                 </Card>
-                <Card>
+                <Card
+                  backgroundImage="https://dynamic-media-cdn.tripadvisor.com/media/photo-o/27/30/f6/37/welcome-to-cj-s-a-fully.jpg?w=1100&h=-1&s=1"
+                  className="custom-class"
+                >
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium">
-                      Subscriptions
-                    </CardTitle>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      className="h-4 w-4 text-muted-foreground"
-                    >
-                      <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
-                      <circle cx="9" cy="7" r="4" />
-                      <path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" />
-                    </svg>
+                    <CardTitle className="text-sm font-medium"></CardTitle>
+                    <CardOffer>
+                      <p className="font-bold">-25%</p>
+                    </CardOffer>
                   </CardHeader>
-                  <CardContent>
-                    <div className="text-2xl font-bold">+2350</div>
-                    <p className="text-xs text-muted-foreground">
-                      +180.1% from last month
-                    </p>
+                  <CardContent className="p-2">
+                    {" "}
+                    {/* Adjusted padding */}
+                    <CardDetail>
+                      <p className="text-xs font-bold text-white">CJ's</p>
+                    </CardDetail>
                   </CardContent>
                 </Card>
-                <Card>
+                <Card
+                  backgroundImage="https://www.andy-cooks.com/cdn/shop/articles/20230826032636-andy-20cooks-20-20korean-20fried-20chicken.jpg?v=169308"
+                  className="custom-class"
+                >
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium">Sales</CardTitle>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      className="h-4 w-4 text-muted-foreground"
-                    >
-                      <rect width="20" height="14" x="2" y="5" rx="2" />
-                      <path d="M2 10h20" />
-                    </svg>
+                    <CardTitle className="text-sm font-medium"></CardTitle>
+                    <CardOffer>
+                      <p className="font-bold">-55%</p>
+                    </CardOffer>
                   </CardHeader>
-                  <CardContent>
-                    <div className="text-2xl font-bold">+12,234</div>
-                    <p className="text-xs text-muted-foreground">
-                      +19% from last month
-                    </p>
+                  <CardContent className="p-2">
+                    {" "}
+                    {/* Adjusted padding */}
+                    <CardDetail>
+                      <p className="text-xs font-bold text-white">Smokeys</p>
+                    </CardDetail>
                   </CardContent>
                 </Card>
-                <Card>
+                <Card
+                  backgroundImage="https://media-cdn.tripadvisor.com/media/photo-s/16/50/b2/32/big-knife-doner-shawarma.jpg"
+                  className="custom-class"
+                >
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium">
-                      Active Now
-                    </CardTitle>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      className="h-4 w-4 text-muted-foreground"
-                    >
-                      <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
-                    </svg>
+                    <CardTitle className="text-sm font-medium"></CardTitle>
+                    <CardOffer>
+                      <p className="font-bold">-55%</p>
+                    </CardOffer>
                   </CardHeader>
-                  <CardContent>
-                    <div className="text-2xl font-bold">+573</div>
-                    <p className="text-xs text-muted-foreground">
-                      +201 since last hour
-                    </p>
+                  <CardContent className="p-2">
+                    {" "}
+                    {/* Adjusted padding */}
+                    <CardDetail>
+                      <p className="text-xs font-bold text-white">Big Knife</p>
+                    </CardDetail>
                   </CardContent>
                 </Card>
               </div>
-              <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-                <Card className="col-span-4">
-                  <CardHeader>
-                    <CardTitle>Overview</CardTitle>
+            </TabsContent>
+            <TabsContent value="restaurants" className="space-y-4">
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+                <Card
+                  backgroundImage="https://dynamic-media-cdn.tripadvisor.com/media/photo-o/1b/99/44/8e/kfc-faxafeni.jpg?w=800&h=-1&s=1"
+                  className="custom-class"
+                >
+                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <CardTitle className="text-sm font-medium"></CardTitle>
+                    <CardOffer>
+                      <p className="font-bold">-55%</p>
+                    </CardOffer>
                   </CardHeader>
-                  <CardContent className="pl-2">
-                    <Overview />
+                  <CardContent className="p-2">
+                    {" "}
+                    {/* Adjusted padding */}
+                    <CardDetail>
+                      <p className="text-xs font-bold text-white">KFC</p>
+                    </CardDetail>
                   </CardContent>
                 </Card>
-                <Card className="col-span-3">
-                  <CardHeader>
-                    <CardTitle>Recent Sales</CardTitle>
-                    <CardDescription>
-                      You made 265 sales this month.
-                    </CardDescription>
+                <Card
+                  backgroundImage="https://dynamic-media-cdn.tripadvisor.com/media/photo-o/27/30/f6/37/welcome-to-cj-s-a-fully.jpg?w=1100&h=-1&s=1"
+                  className="custom-class"
+                >
+                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <CardTitle className="text-sm font-medium"></CardTitle>
+                    <CardOffer>
+                      <p className="font-bold">-25%</p>
+                    </CardOffer>
                   </CardHeader>
-                  <CardContent>
-                    <RecentSales />
+                  <CardContent className="p-2">
+                    {" "}
+                    {/* Adjusted padding */}
+                    <CardDetail>
+                      <p className="text-xs font-bold text-white">CJ's</p>
+                    </CardDetail>
+                  </CardContent>
+                </Card>
+                <Card
+                  backgroundImage="https://www.andy-cooks.com/cdn/shop/articles/20230826032636-andy-20cooks-20-20korean-20fried-20chicken.jpg?v=169308"
+                  className="custom-class"
+                >
+                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <CardTitle className="text-sm font-medium"></CardTitle>
+                    <CardOffer>
+                      <p className="font-bold">-55%</p>
+                    </CardOffer>
+                  </CardHeader>
+                  <CardContent className="p-2">
+                    {" "}
+                    {/* Adjusted padding */}
+                    <CardDetail>
+                      <p className="text-xs font-bold text-white">Smokeys</p>
+                    </CardDetail>
+                  </CardContent>
+                </Card>
+                <Card
+                  backgroundImage="https://media-cdn.tripadvisor.com/media/photo-s/16/50/b2/32/big-knife-doner-shawarma.jpg"
+                  className="custom-class"
+                >
+                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <CardTitle className="text-sm font-medium"></CardTitle>
+                    <CardOffer>
+                      <p className="font-bold">-55%</p>
+                    </CardOffer>
+                  </CardHeader>
+                  <CardContent className="p-2">
+                    {" "}
+                    {/* Adjusted padding */}
+                    <CardDetail>
+                      <p className="text-xs font-bold text-white">Big Knife</p>
+                    </CardDetail>
+                  </CardContent>
+                </Card>
+              </div>
+            </TabsContent>
+            <TabsContent value="offers" className="space-y-4">
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+                <Card
+                  backgroundImage="https://dynamic-media-cdn.tripadvisor.com/media/photo-o/1b/99/44/8e/kfc-faxafeni.jpg?w=800&h=-1&s=1"
+                  className="custom-class"
+                >
+                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <CardTitle className="text-sm font-medium"></CardTitle>
+                    <CardOffer>
+                      <p className="font-bold">-55%</p>
+                    </CardOffer>
+                  </CardHeader>
+                  <CardContent className="p-2">
+                    {" "}
+                    {/* Adjusted padding */}
+                    <CardDetail>
+                      <p className="text-xs font-bold text-white">KFC</p>
+                    </CardDetail>
+                  </CardContent>
+                </Card>
+                <Card
+                  backgroundImage="https://dynamic-media-cdn.tripadvisor.com/media/photo-o/27/30/f6/37/welcome-to-cj-s-a-fully.jpg?w=1100&h=-1&s=1"
+                  className="custom-class"
+                >
+                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <CardTitle className="text-sm font-medium"></CardTitle>
+                    <CardOffer>
+                      <p className="font-bold">-25%</p>
+                    </CardOffer>
+                  </CardHeader>
+                  <CardContent className="p-2">
+                    {" "}
+                    {/* Adjusted padding */}
+                    <CardDetail>
+                      <p className="text-xs font-bold text-white">CJ's</p>
+                    </CardDetail>
+                  </CardContent>
+                </Card>
+                <Card
+                  backgroundImage="https://www.andy-cooks.com/cdn/shop/articles/20230826032636-andy-20cooks-20-20korean-20fried-20chicken.jpg?v=169308"
+                  className="custom-class"
+                >
+                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <CardTitle className="text-sm font-medium"></CardTitle>
+                    <CardOffer>
+                      <p className="font-bold">-55%</p>
+                    </CardOffer>
+                  </CardHeader>
+                  <CardContent className="p-2">
+                    {" "}
+                    {/* Adjusted padding */}
+                    <CardDetail>
+                      <p className="text-xs font-bold text-white">Smokeys</p>
+                    </CardDetail>
+                  </CardContent>
+                </Card>
+                <Card
+                  backgroundImage="https://media-cdn.tripadvisor.com/media/photo-s/16/50/b2/32/big-knife-doner-shawarma.jpg"
+                  className="custom-class"
+                >
+                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <CardTitle className="text-sm font-medium"></CardTitle>
+                    <CardOffer>
+                      <p className="font-bold">-55%</p>
+                    </CardOffer>
+                  </CardHeader>
+                  <CardContent className="p-2">
+                    {" "}
+                    {/* Adjusted padding */}
+                    <CardDetail>
+                      <p className="text-xs font-bold text-white">Big Knife</p>
+                    </CardDetail>
+                  </CardContent>
+                </Card>
+              </div>
+            </TabsContent>
+            <TabsContent value="combos" className="space-y-4">
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+                <Card
+                  backgroundImage="https://dynamic-media-cdn.tripadvisor.com/media/photo-o/1b/99/44/8e/kfc-faxafeni.jpg?w=800&h=-1&s=1"
+                  className="custom-class"
+                >
+                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <CardTitle className="text-sm font-medium"></CardTitle>
+                    <CardOffer>
+                      <p className="font-bold">-55%</p>
+                    </CardOffer>
+                  </CardHeader>
+                  <CardContent className="p-2">
+                    {" "}
+                    {/* Adjusted padding */}
+                    <CardDetail>
+                      <p className="text-xs font-bold text-white">KFC</p>
+                    </CardDetail>
+                  </CardContent>
+                </Card>
+                <Card
+                  backgroundImage="https://dynamic-media-cdn.tripadvisor.com/media/photo-o/27/30/f6/37/welcome-to-cj-s-a-fully.jpg?w=1100&h=-1&s=1"
+                  className="custom-class"
+                >
+                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <CardTitle className="text-sm font-medium"></CardTitle>
+                    <CardOffer>
+                      <p className="font-bold">-25%</p>
+                    </CardOffer>
+                  </CardHeader>
+                  <CardContent className="p-2">
+                    {" "}
+                    {/* Adjusted padding */}
+                    <CardDetail>
+                      <p className="text-xs font-bold text-white">CJ's</p>
+                    </CardDetail>
+                  </CardContent>
+                </Card>
+                <Card
+                  backgroundImage="https://www.andy-cooks.com/cdn/shop/articles/20230826032636-andy-20cooks-20-20korean-20fried-20chicken.jpg?v=169308"
+                  className="custom-class"
+                >
+                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <CardTitle className="text-sm font-medium"></CardTitle>
+                    <CardOffer>
+                      <p className="font-bold">-55%</p>
+                    </CardOffer>
+                  </CardHeader>
+                  <CardContent className="p-2">
+                    {" "}
+                    {/* Adjusted padding */}
+                    <CardDetail>
+                      <p className="text-xs font-bold text-white">Smokeys</p>
+                    </CardDetail>
+                  </CardContent>
+                </Card>
+                <Card
+                  backgroundImage="https://media-cdn.tripadvisor.com/media/photo-s/16/50/b2/32/big-knife-doner-shawarma.jpg"
+                  className="custom-class"
+                >
+                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <CardTitle className="text-sm font-medium"></CardTitle>
+                    <CardOffer>
+                      <p className="font-bold">-55%</p>
+                    </CardOffer>
+                  </CardHeader>
+                  <CardContent className="p-2">
+                    {" "}
+                    {/* Adjusted padding */}
+                    <CardDetail>
+                      <p className="text-xs font-bold text-white">Big Knife</p>
+                    </CardDetail>
                   </CardContent>
                 </Card>
               </div>
@@ -212,5 +384,5 @@ export default function DashboardPage() {
         </div>
       </div>
     </>
-  )
+  );
 }
